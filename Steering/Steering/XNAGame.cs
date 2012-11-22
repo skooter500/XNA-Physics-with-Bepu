@@ -16,6 +16,7 @@ using BEPUphysics.Constraints.SolverGroups;
 using BEPUphysics.Collidables.MobileCollidables;
 using BEPUphysics.DataStructures;
 
+
 namespace Steering
 {
     /// <summary>
@@ -107,7 +108,7 @@ namespace Steering
         {
             // TODO: Add your initialization logic here
             camera = new Camera();
-            camera.Position = new Vector3(0, 30, 100);
+            camera.Position = new Vector3(0, 30, -10);
             int midX = GraphicsDeviceManager.DefaultBackBufferHeight / 2;
             int midY = GraphicsDeviceManager.DefaultBackBufferWidth / 2;
             Mouse.SetPosition(midX, midY);
@@ -120,14 +121,14 @@ namespace Steering
             base.Initialize();
         }
 
-        BepuEntity createWheel(Vector3 position, float wheelWidth, float wheelRadius)
+        public BepuEntity createWheel(Vector3 position, float wheelWidth, float wheelRadius, Quaternion q)
         {
             BepuEntity wheelEntity = new BepuEntity();
             wheelEntity.modelName = "cyl";
             wheelEntity.LoadContent();
             wheelEntity.body = new Cylinder(position, wheelWidth, wheelRadius, wheelRadius);
             wheelEntity.localTransform = Matrix.CreateScale(wheelRadius, wheelWidth, wheelRadius);
-            wheelEntity.body.Orientation = Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), MathHelper.PiOver2);
+            wheelEntity.body.Orientation = q;
             wheelEntity.diffuse = new Vector3((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble());
             space.Add(wheelEntity.body);
             children.Add(wheelEntity);
@@ -137,7 +138,7 @@ namespace Steering
 
         BepuEntity createCog(Vector3 position, float radius, int gears)
         {
-            BepuEntity wheel = createWheel(position, 1, radius);
+            BepuEntity wheel = createWheel(position, 1, radius,  Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), MathHelper.PiOver2));
 
             float angleDelta = (MathHelper.Pi * 2.0f) / (float) gears;
 
@@ -173,23 +174,24 @@ namespace Steering
             BepuEntity wheel;
             RevoluteJoint joint;
             SwivelHingeJoint steerJoint;
+            Quaternion q = Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), MathHelper.PiOver2);
             Vector3 wheelPos = new Vector3(position.X - (width / 2) + wheelRadius, position.Y, position.Z - (length / 2));
-            wheel = createWheel(wheelPos, wheelWidth, wheelRadius);
+            wheel = createWheel(wheelPos, wheelWidth, wheelRadius, q);
             wheelPos = new Vector3(position.X - (width / 2) + wheelRadius, position.Y, position.Z - (length / 2) - (wheelWidth * 2));
 
             joint = new RevoluteJoint(chassis.body, wheel.body, wheel.body.Position, new Vector3(0, 0, -1));
             space.Add(joint);
 
-            wheel = createWheel(new Vector3(position.X - (width / 2) + wheelRadius, position.Y, position.Z + (length / 2) + wheelWidth), wheelWidth, wheelRadius);
+            wheel = createWheel(new Vector3(position.X - (width / 2) + wheelRadius, position.Y, position.Z + (length / 2) + wheelWidth), wheelWidth, wheelRadius, q);
             joint = new RevoluteJoint(chassis.body, wheel.body, wheel.body.Position, new Vector3(0, 0, -1));
             space.Add(joint);
 
 
-            wheel = createWheel(new Vector3(position.X + (width / 2) - wheelRadius, position.Y, position.Z - (length / 2) - wheelWidth), wheelWidth, wheelRadius);
+            wheel = createWheel(new Vector3(position.X + (width / 2) - wheelRadius, position.Y, position.Z - (length / 2) - wheelWidth), wheelWidth, wheelRadius, q);
             joint = new RevoluteJoint(chassis.body, wheel.body, wheel.body.Position, new Vector3(0, 0, -1));
             space.Add(joint);
             
-            wheel = createWheel(new Vector3(position.X + (width / 2) - wheelRadius, position.Y, position.Z + (length / 2) + wheelWidth), wheelWidth, wheelRadius);
+            wheel = createWheel(new Vector3(position.X + (width / 2) - wheelRadius, position.Y, position.Z + (length / 2) + wheelWidth), wheelWidth, wheelRadius, q);
             joint = new RevoluteJoint(chassis.body, wheel.body, wheel.body.Position, new Vector3(0, 0, -1));
             space.Add(joint);
              
@@ -209,20 +211,20 @@ namespace Steering
 
             BepuEntity wheel;
             RevoluteJoint joint;
-
-            wheel = createWheel(new Vector3(position.X - (width / 2) + wheelRadius, position.Y, position.Z - (length / 2) - wheelWidth), wheelWidth, wheelRadius);
+            Quaternion q = Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), MathHelper.PiOver2);
+            wheel = createWheel(new Vector3(position.X - (width / 2) + wheelRadius, position.Y, position.Z - (length / 2) - wheelWidth), wheelWidth, wheelRadius, q);
             joint = new RevoluteJoint(chassis.body, wheel.body, wheel.body.Position, new Vector3(0, 0, -1));
             space.Add(joint);
             
-            wheel = createWheel(new Vector3(position.X + (width / 2) - wheelRadius, position.Y, position.Z - (length / 2) - wheelWidth), wheelWidth, wheelRadius);
+            wheel = createWheel(new Vector3(position.X + (width / 2) - wheelRadius, position.Y, position.Z - (length / 2) - wheelWidth), wheelWidth, wheelRadius, q);
             joint = new RevoluteJoint(chassis.body, wheel.body, wheel.body.Position, new Vector3(0, 0, -1));
             space.Add(joint);
 
-            wheel = createWheel(new Vector3(position.X - (width / 2) + wheelRadius, position.Y, position.Z + (length / 2) + wheelWidth), wheelWidth, wheelRadius);
+            wheel = createWheel(new Vector3(position.X - (width / 2) + wheelRadius, position.Y, position.Z + (length / 2) + wheelWidth), wheelWidth, wheelRadius, q);
             joint = new RevoluteJoint(chassis.body, wheel.body, wheel.body.Position, new Vector3(0, 0, -1));
             space.Add(joint);
 
-            wheel = createWheel(new Vector3(position.X + (width / 2) - wheelRadius, position.Y, position.Z + (length / 2) + wheelWidth), wheelWidth, wheelRadius);
+            wheel = createWheel(new Vector3(position.X + (width / 2) - wheelRadius, position.Y, position.Z + (length / 2) + wheelWidth), wheelWidth, wheelRadius, q);
             joint = new RevoluteJoint(chassis.body, wheel.body, wheel.body.Position, new Vector3(0, 0, -1));
             space.Add(joint);
         }
@@ -238,11 +240,11 @@ namespace Steering
 
         void createWall()
         {
-            for (float z = -20; z < 20; z += 5)
+            for (float x = -20; x < 20; x += 5)
             {
                 for (float y = 60; y > 0; y -= 5)
                 {
-                    createBox(new Vector3(-20, y, z), 4, 4, 4);
+                    createBox(new Vector3(x, y, -70), 4, 4, 4);
                 }
             }
         }
@@ -330,9 +332,13 @@ namespace Steering
             cameraCylindar = new Cylinder(Camera.Position, 5, 2);
             space.Add(cameraCylindar);
 
-            createTower();
+            Person person = new Person();
+            children.Add(person);
+            
+
+            //createTower();
             createWall();
-            jointDemo();
+            //jointDemo();
         }
 
         BepuEntity createFromMesh(Vector3 position, string mesh, float scale)
@@ -379,8 +385,6 @@ namespace Steering
             spriteBatch = new SpriteBatch(GraphicsDevice);
             resetScene();
             
-            
-
             crosshairs = Content.Load<Texture2D>("sprites_crosshairs");
 
             foreach (GameEntity child in children)
@@ -581,7 +585,7 @@ namespace Steering
             }
 
             cameraCylindar.Position = camera.Position;
-            space.Update();
+            space.Update(timeDelta);
             
             
             base.Update(gameTime);
@@ -595,10 +599,11 @@ namespace Steering
         {
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
-            foreach (GameEntity child in children)
+            for (int i = 0; i < children.Count; i ++ )
             {
+                GameEntity child = children[i];
                 DepthStencilState state = new DepthStencilState();
-                state.DepthBufferEnable = true;                
+                state.DepthBufferEnable = true;
                 GraphicsDevice.DepthStencilState = state;
                 child.Draw(gameTime);
             }
@@ -613,7 +618,6 @@ namespace Steering
             origin.X = spriteRect.Width / 2;
             origin.Y = spriteRect.Height / 2;
             spriteBatch.Draw(crosshairs, center, spriteRect, Color.Orange, 0.0f, origin, 1.0f, SpriteEffects.None, 0.0f);
-
             spriteBatch.End();            
         }
 

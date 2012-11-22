@@ -16,7 +16,7 @@ using BEPUphysics.NarrowPhaseSystems.Pairs;
 
 namespace Steering
 {
-    class BepuEntity:GameEntity
+    public class BepuEntity:GameEntity
     {
         SoundEffect soundEffect;
         SoundEffectInstance soundEffectInstance;

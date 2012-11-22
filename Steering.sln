@@ -5,8 +5,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Steering", "Steering\Steeri
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteeringContent", "Steering\SteeringContent\SteeringContent.contentproj", "{C9C62848-1E68-4CF5-9064-62325173C2B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Windows Phone Copy of Steering", "Steering\Steering\Windows Phone Copy of Steering.csproj", "{CD57D69E-6D3F-46BA-84BF-D1E8FCF8F6CC}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -35,20 +33,6 @@ Global
 		{C9C62848-1E68-4CF5-9064-62325173C2B5}.Release|Mixed Platforms.ActiveCfg = Release|x86
 		{C9C62848-1E68-4CF5-9064-62325173C2B5}.Release|Windows Phone.ActiveCfg = Release|x86
 		{C9C62848-1E68-4CF5-9064-62325173C2B5}.Release|x86.ActiveCfg = Release|x86
-		{CD57D69E-6D3F-46BA-84BF-D1E8FCF8F6CC}.Debug|Mixed Platforms.ActiveCfg = Debug|Windows Phone
-		{CD57D69E-6D3F-46BA-84BF-D1E8FCF8F6CC}.Debug|Mixed Platforms.Build.0 = Debug|Windows Phone
-		{CD57D69E-6D3F-46BA-84BF-D1E8FCF8F6CC}.Debug|Mixed Platforms.Deploy.0 = Debug|Windows Phone
-		{CD57D69E-6D3F-46BA-84BF-D1E8FCF8F6CC}.Debug|Windows Phone.ActiveCfg = Debug|Windows Phone
-		{CD57D69E-6D3F-46BA-84BF-D1E8FCF8F6CC}.Debug|Windows Phone.Build.0 = Debug|Windows Phone
-		{CD57D69E-6D3F-46BA-84BF-D1E8FCF8F6CC}.Debug|Windows Phone.Deploy.0 = Debug|Windows Phone
-		{CD57D69E-6D3F-46BA-84BF-D1E8FCF8F6CC}.Debug|x86.ActiveCfg = Debug|Windows Phone
-		{CD57D69E-6D3F-46BA-84BF-D1E8FCF8F6CC}.Release|Mixed Platforms.ActiveCfg = Release|Windows Phone
-		{CD57D69E-6D3F-46BA-84BF-D1E8FCF8F6CC}.Release|Mixed Platforms.Build.0 = Release|Windows Phone
-		{CD57D69E-6D3F-46BA-84BF-D1E8FCF8F6CC}.Release|Mixed Platforms.Deploy.0 = Release|Windows Phone
-		{CD57D69E-6D3F-46BA-84BF-D1E8FCF8F6CC}.Release|Windows Phone.ActiveCfg = Release|Windows Phone
-		{CD57D69E-6D3F-46BA-84BF-D1E8FCF8F6CC}.Release|Windows Phone.Build.0 = Release|Windows Phone
-		{CD57D69E-6D3F-46BA-84BF-D1E8FCF8F6CC}.Release|Windows Phone.Deploy.0 = Release|Windows Phone
-		{CD57D69E-6D3F-46BA-84BF-D1E8FCF8F6CC}.Release|x86.ActiveCfg = Release|Windows Phone
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
