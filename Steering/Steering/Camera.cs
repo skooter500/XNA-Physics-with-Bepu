@@ -40,7 +40,9 @@ namespace Steering
             Position = new Vector3(0.0f, 30.0f, 50.0f);
             Look = new Vector3(0.0f, 0.0f, -1.0f);
         }
-
+        
+        int oldX = 0, oldY = 0;
+        bool lastPressed = false;
         public override void Update(GameTime gameTime)
         {
 
@@ -54,15 +56,32 @@ namespace Steering
             int mouseX = mouseState.X;
             int mouseY = mouseState.Y;
 
-            int midX = GraphicsDeviceManager.DefaultBackBufferHeight / 2;
-            int midY = GraphicsDeviceManager.DefaultBackBufferWidth / 2;
-            
-            int deltaX = mouseX - midX;
-            int deltaY = mouseY - midY;
+            if (mouseState.LeftButton == ButtonState.Pressed)
+            {
+                if (lastPressed)
+                {
+                    int deltaX = mouseX - oldX;
+                    int deltaY = mouseY - oldY;
 
-            yaw(-(float)deltaX / 1000.0f);
-            pitch(-(float)deltaY / 1000.0f);
-           Mouse.SetPosition(midX, midY);
+                    yaw(-(float)deltaX / 1000.0f);
+                    pitch(-(float)deltaY / 1000.0f);
+                    Mouse.SetPosition(oldX, oldY);
+                }
+                else
+                {
+                    lastPressed = true;
+                    oldX = mouseX;
+                    oldY = mouseY;
+                }
+            }
+            else
+            {
+                lastPressed = false;
+            }
+
+
+            
+            
 #elif WINDOWS_PHONE
             if (mouseState.LeftButton == ButtonState.Pressed)
             {

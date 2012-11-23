@@ -33,12 +33,19 @@ namespace Steering
 
             if (this.Sensor != null)
             {
-                this.LastStatus = this.Sensor.Status;
+                LastStatus = this.Sensor.Status;
 
                 // If this sensor is connected, then enable it
                 if (this.LastStatus == KinectStatus.Connected)
                 {
-                    this.Sensor.SkeletonStream.Enable();
+                    sensor.SkeletonStream.Enable(new TransformSmoothParameters()
+                    {
+                        Smoothing = 0.5f,
+                        Correction = 0.5f,
+                        Prediction = 0.5f,
+                        JitterRadius = 0.05f,
+                        MaxDeviationRadius = 0.04f
+                    });
 
                     try
                     {
@@ -68,6 +75,56 @@ namespace Steering
         {
         }
 
+        private void DrawFace(JointCollection joints, JointType joint, float size)
+        {
+            SkeletonPoint sP;
+            sP = joints[joint].Position;
+
+            float scale = 30.0f;
+            Vector3 pos = new Vector3(sP.X, sP.Y - footHeight, -sP.Z);
+
+            pos *= scale;
+            string key = "" + joint;
+            BepuEntity bepuEntity;
+            if (!bones.ContainsKey(key))
+            {
+                bepuEntity = XNAGame.Instance.createBox(pos, size, size, 1);
+                bepuEntity.diffuse = new Vector3(0.5f, 0.5f, 0.5f);
+                bepuEntity.body.BecomeKinematic();
+                bones.Add(key, bepuEntity);
+            }
+            else
+            {
+                bepuEntity = bones[key];
+                bepuEntity.body.Position = pos;
+            }
+        }
+
+        private void DrawJoint(JointCollection joints, JointType joint, float size)
+        {
+            SkeletonPoint sP;
+            sP = joints[joint].Position;
+
+            float scale = 30.0f;
+            Vector3 pos = new Vector3(sP.X, sP.Y - footHeight, -sP.Z);
+
+            pos *= scale;
+            string key = "" + joint;
+            BepuEntity bepuEntity;
+            if (!bones.ContainsKey(key))
+            {
+                bepuEntity = XNAGame.Instance.createBall(pos, size);
+                bepuEntity.diffuse = new Vector3(1.0f, 0.0f, 0.0f);
+                bepuEntity.body.BecomeKinematic();
+                bones.Add(key, bepuEntity);
+            }
+            else
+            {
+                bepuEntity = bones[key];
+                bepuEntity.body.Position = pos;
+            }
+        }
+
         private void DrawBone(JointCollection joints, JointType startJoint, JointType endJoint)
         {
             SkeletonPoint sP, eP;
@@ -92,7 +149,7 @@ namespace Steering
             String key = "" + startJoint + endJoint;
             if (!bones.ContainsKey(key))
             {
-                cylEntity = XNAGame.Instance.createWheel(centrePos, boneLength * 0.9f, 0.5f, q);
+                cylEntity = XNAGame.Instance.createWheel(centrePos, boneLength, 0.5f, q);
                 cylEntity.diffuse = new Vector3(0, 0, 1);
                 cylEntity.body.BecomeKinematic();
                 bones.Add(key, cylEntity);
@@ -101,6 +158,7 @@ namespace Steering
             {
                 cylEntity = bones[key];
                 cylEntity.body.Position = centrePos;
+                cylEntity.localTransform = Matrix.CreateScale(0.5f, boneLength, 0.5f);
                 cylEntity.body.Orientation = q;
             }
             
@@ -115,7 +173,7 @@ namespace Steering
                 {
                     if (skeleton.TrackingState == SkeletonTrackingState.Tracked)
                     {
-                        footHeight = Math.Min(skeleton.Joints[JointType.AnkleLeft].Position.Y, skeleton.Joints[JointType.AnkleRight].Position.Y);
+                        footHeight = Math.Min(skeleton.Joints[JointType.FootLeft].Position.Y, skeleton.Joints[JointType.FootRight].Position.Y);
                         // Draw Bones
                         DrawBone(skeleton.Joints, JointType.Head, JointType.ShoulderCenter);
                         DrawBone(skeleton.Joints, JointType.ShoulderCenter, JointType.ShoulderLeft);
@@ -140,6 +198,28 @@ namespace Steering
                         DrawBone(skeleton.Joints, JointType.HipRight, JointType.KneeRight);
                         DrawBone(skeleton.Joints, JointType.KneeRight, JointType.AnkleRight);
                         DrawBone(skeleton.Joints, JointType.AnkleRight, JointType.FootRight);
+
+                        DrawFace(skeleton.Joints, JointType.Head, 8);
+                        DrawJoint(skeleton.Joints, JointType.ShoulderCenter, 1);
+                        DrawJoint(skeleton.Joints, JointType.ShoulderLeft, 1);
+                        DrawJoint(skeleton.Joints, JointType.ShoulderRight, 1);
+                        DrawJoint(skeleton.Joints, JointType.ElbowLeft, 1);
+                        DrawJoint(skeleton.Joints, JointType.ElbowRight, 1);
+                        DrawJoint(skeleton.Joints, JointType.WristLeft, 1);
+                        DrawJoint(skeleton.Joints, JointType.WristRight, 1);
+
+                        DrawJoint(skeleton.Joints, JointType.HipCenter, 1);
+                        DrawJoint(skeleton.Joints, JointType.Spine, 1);
+                        DrawJoint(skeleton.Joints, JointType.HipLeft, 1);
+                        DrawJoint(skeleton.Joints, JointType.HipRight, 1);
+                        DrawJoint(skeleton.Joints, JointType.KneeLeft, 1);
+                        DrawJoint(skeleton.Joints, JointType.KneeRight, 1);
+                        DrawJoint(skeleton.Joints, JointType.AnkleLeft, 1);
+                        DrawJoint(skeleton.Joints, JointType.AnkleRight, 1);
+
+                        DrawFace(skeleton.Joints, JointType.HandLeft, 8);
+                        DrawFace(skeleton.Joints, JointType.HandRight, 8);
+
                     }
                 }
             }

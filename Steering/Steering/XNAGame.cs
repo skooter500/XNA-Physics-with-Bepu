@@ -89,10 +89,10 @@ namespace Steering
             graphics = new GraphicsDeviceManager(this);
 
 #if WINDOWS
-            graphics.PreferredBackBufferWidth = 1024;
-            graphics.PreferredBackBufferHeight = 768;
+            graphics.PreferredBackBufferWidth = 1920;
+            graphics.PreferredBackBufferHeight = 1080;
             graphics.PreferMultiSampling = true;
-            graphics.IsFullScreen = false;
+            graphics.IsFullScreen = true;
             graphics.SynchronizeWithVerticalRetrace = true;
             
 #elif WINDOWS_PHONE
@@ -108,7 +108,7 @@ namespace Steering
         {
             // TODO: Add your initialization logic here
             camera = new Camera();
-            camera.Position = new Vector3(0, 30, -10);
+            camera.Position = new Vector3(0, 30, 50);
             int midX = GraphicsDeviceManager.DefaultBackBufferHeight / 2;
             int midY = GraphicsDeviceManager.DefaultBackBufferWidth / 2;
             Mouse.SetPosition(midX, midY);
@@ -244,7 +244,7 @@ namespace Steering
             {
                 for (float y = 60; y > 0; y -= 5)
                 {
-                    createBox(new Vector3(x, y, -70), 4, 4, 4);
+                    createBox(new Vector3(x, y, -75), 4, 4, 4);
                 }
             }
         }
@@ -361,7 +361,21 @@ namespace Steering
             return entity;
         }
 
-        BepuEntity createBox(Vector3 position, float width, float height, float length)
+        public BepuEntity createBall(Vector3 position, float radius)
+        {
+            BepuEntity theBall = new BepuEntity();
+            theBall.modelName = "sphere";
+            theBall.LoadContent();
+            theBall.localTransform = Matrix.CreateScale(new Vector3(radius, radius, radius));
+            theBall.body = new Sphere(position, radius, radius);
+            theBall.diffuse = new Vector3((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble());
+            theBall.configureEvents();
+            space.Add(theBall.body);
+            children.Add(theBall);
+            return theBall;
+        }
+
+        public BepuEntity createBox(Vector3 position, float width, float height, float length)
         {
             BepuEntity theBox = new BepuEntity();
             theBox.modelName = "cube";
